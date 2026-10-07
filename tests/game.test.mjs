@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {
   CATALOG_VERSION, ROUND_SIZE, STORAGE_KEY, createRound, decodeRound,
-  encodeRound, newRoundCode, rank, readRecords, roundFragment, roundVersion,
+  encodeRound, mergeRecords, newRoundCode, rank, readRecords, roundFragment, roundVersion,
   saveRecord, scoreAnswers, shareText, shuffle,
 } from '../public/game.js';
 import {
@@ -177,6 +177,31 @@ test('invalid score records and unavailable storage do not prevent playing', () 
   const result = saveRecord({setItem() {throw Error('Quota');}}, [], 8);
   assert.equal(result.saved, false);
   assert.equal(result.records[0].score, 8);
+  const valid = {score: 7, date: '2026-10-07T12:00:00Z'};
+  assert.deepEqual(readRecords({getItem: () => JSON.stringify([null, valid])}), [valid]);
+});
+
+test('a stale tab merges the latest completed scores before saving its round', () => {
+  const storage = memoryStorage();
+  const staleRecords = readRecords(storage);
+  saveRecord(storage, [], 10);
+  const merged = mergeRecords(staleRecords, readRecords(storage));
+  saveRecord(storage, merged, 0);
+  assert.deepEqual(readRecords(storage).map(record => record.score), [10, 0]);
+});
+
+test('score snapshots retain unsaved scores, dates and existing duplicate counts', () => {
+  const first = {score: 10, date: '2026-10-07T12:00:00Z'};
+  const later = {score: 10, date: '2026-10-07T13:00:00Z'};
+  const unsaved = {score: 8, date: '2026-10-07T14:00:00Z'};
+  const local = [first, unsaved];
+  const saved = [later, first];
+  assert.deepEqual(mergeRecords(local, saved), [later, first, unsaved]);
+  assert.deepEqual(local, [first, unsaved]);
+  assert.deepEqual(saved, [later, first]);
+  assert.deepEqual(mergeRecords(local, []), [first, unsaved]);
+  assert.deepEqual(mergeRecords([first, first], [first]), [first, first]);
+  assert.deepEqual(mergeRecords([first], [first, first]), [first, first]);
 });
 
 test('collection deduplicates stable IDs and retains the first earned date', () => {

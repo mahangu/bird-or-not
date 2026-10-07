@@ -5,6 +5,8 @@ export const ROUND_SIZE = 10;
 export const STORAGE_KEY = 'bird-or-not:sri-lanka:v1';
 // Archive each catalogue revision before changing names, fakes or bird records.
 export const CATALOG_VERSION = 3;
+const compareRecords = (a, b) => b.score - a.score || b.date.localeCompare(a.date);
+const recordKey = record => `${record.score}:${record.date}`;
 
 export function shuffle(items, random = Math.random) {
   const result = [...items];
@@ -53,7 +55,7 @@ export function readRecords(storage) {
     const records = JSON.parse(storage.getItem(STORAGE_KEY));
     if (!records || typeof records !== 'object') return [];
     return (Array.isArray(records) ? records : []).filter(record =>
-      Number.isInteger(record.score) && record.score >= 0 && record.score <= ROUND_SIZE
+      record && Number.isInteger(record.score) && record.score >= 0 && record.score <= ROUND_SIZE
       && typeof record.date === 'string' && !Number.isNaN(Date.parse(record.date)),
     ).slice(0, 5);
   } catch {
@@ -63,7 +65,7 @@ export function readRecords(storage) {
 
 export function saveRecord(storage, records, score) {
   const next = [...records, {score, date: new Date().toISOString()}]
-    .sort((a, b) => b.score - a.score || b.date.localeCompare(a.date))
+    .sort(compareRecords)
     .slice(0, 5);
   try {
     storage.setItem(STORAGE_KEY, JSON.stringify(next));
@@ -71,6 +73,24 @@ export function saveRecord(storage, records, score) {
   } catch {
     return {records: next, saved: false};
   }
+}
+
+export function mergeRecords(records, savedRecords) {
+  const merged = [...savedRecords];
+  const remaining = new Map();
+  for (const record of savedRecords) {
+    const key = recordKey(record);
+    remaining.set(key, (remaining.get(key) || 0) + 1);
+  }
+  // Both snapshots may contain the same saved entries. Keep unsaved local
+  // scores too, without duplicating the entries shared by the two snapshots.
+  for (const record of records) {
+    const key = recordKey(record);
+    const count = remaining.get(key) || 0;
+    if (count) remaining.set(key, count - 1);
+    else merged.push(record);
+  }
+  return merged.sort(compareRecords).slice(0, 5);
 }
 
 export function scoreAnswers(answers) {

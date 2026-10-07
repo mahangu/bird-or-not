@@ -17,6 +17,6 @@ sf source archive \
   --archive-prefix bird-or-not-v17/
 ```
 
-The archive's files were placed in `public/` without content changes for the first Git commit. The cleanup changes only `app.js`, `game.js` and `collection.js` in that tree. Artwork, credits, styles, HTML, bird data, all three catalogues and the published seed module retain their source bytes. The imported archive contains the static site; it does not include the upstream Git history or earlier local research scripts.
+The archive's files were placed in `public/` without content changes for the first Git commit. Cleanup changes `app.js`, `game.js` and `collection.js`; `index.html` and `style.css` add footer links to the source and code license. Artwork, credits, bird data, all three catalogues and the published seed module retain their source bytes. The imported archive contains the static site; it does not include the upstream Git history or earlier local research scripts.
 
 Replay fixtures in `tests/fixtures/published-rounds.json` were recorded from the unmodified import. They pin the seed module and catalogues by SHA-256, selected published compact rounds by their verbose encoding, and the original random draw order for 128 `createRound` runs.

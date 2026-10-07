@@ -7,15 +7,15 @@ The imported v17 [asset manifest](public/asset-licenses.json) records creator, s
 | Material | Files | Terms |
 | --- | ---: | --- |
 | Historical plates and released artwork | 45 | Public domain, with the file-specific basis in the manifest |
-| Bird images | 4 | CC BY 2.0 |
-| Bird images | 1 | CC BY 2.5 |
-| Bird images | 3 | CC BY 4.0 |
-| Bird images | 6 | CC BY-SA 2.0 |
-| Bird images | 6 | CC BY-SA 3.0 |
-| Bird images | 24 | CC BY-SA 4.0 |
-| DM Sans and Cormorant fonts | 2 | SIL Open Font License 1.1 |
+| Bird images | 4 | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) |
+| Bird images | 1 | [CC BY 2.5](https://creativecommons.org/licenses/by/2.5/) |
+| Bird images | 3 | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) |
+| Bird images | 6 | [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/) |
+| Bird images | 6 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) |
+| Bird images | 24 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| DM Sans and Cormorant fonts | 2 | [SIL Open Font License 1.1](https://openfontlicense.org/open-font-license-official-text/) |
 | Urban Fishing Cat logo | 1 | Project-specific owner authorization |
-| Social preview compositions | 2 | CC BY 2.0 bird image plus separately authorized logo |
+| Social preview compositions | 2 | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/) bird image plus separately authorized logo |
 
 Creative Commons images retain their credited authors and source links. Changes made for the game are recorded per file. ShareAlike image adaptations retain their corresponding CC BY-SA version; this repository's GPL license does not replace those image terms. Public-domain status rests on each recorded source or release, not on a blanket worldwide warranty.
 

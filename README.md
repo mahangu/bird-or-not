@@ -7,10 +7,14 @@ An illustrated Sri Lankan bird-name quiz. Each flock has ten birds: choose the r
 Use Node.js 22 or newer:
 
 ```sh
+git clone https://github.com/mahangu/bird-or-not.git
+cd bird-or-not
 npm run dev
 ```
 
-Open http://127.0.0.1:4173. Set `PORT` to use another port. The game has no runtime dependencies, build step, account system or backend. Serve it over HTTP; opening `index.html` directly does not support its module and catalogue requests.
+Open http://127.0.0.1:4173. No dependency installation is needed to play. Stop the server with Ctrl+C. To use another port on macOS or Linux, run `PORT=4180 npm run dev`; in PowerShell, run `$env:PORT=4180; npm run dev`.
+
+The game has no runtime dependencies, build step, account system or backend. Serve it over HTTP; opening `index.html` directly does not support its module and catalogue requests.
 
 ## Test
 
@@ -27,7 +31,9 @@ npm ci
 npm run test:browser
 ```
 
-The browser script starts and stops its own local server. To use a running server, set `BIRD_TEST_URL`, for example `BIRD_TEST_URL=http://127.0.0.1:4180 npm run test:browser`. `BIRD_BROWSER_CHANNEL` defaults to `chrome`; set it to `chromium` after `npx playwright install chromium` to use Playwright's Chromium. Screenshots and browser results go into ignored `qa/`.
+The browser script starts and stops its own local server. Stop an existing dev server first, or reuse it by setting `BIRD_TEST_URL`, for example `BIRD_TEST_URL=http://127.0.0.1:4180 npm run test:browser` on macOS or Linux. In PowerShell, use `$env:BIRD_TEST_URL='http://127.0.0.1:4180'; npm run test:browser`.
+
+`BIRD_BROWSER_CHANNEL` defaults to `chrome`; set it to `chromium` after `npx playwright install chromium` to use Playwright's Chromium. Screenshots and browser results go into ignored `qa/`.
 
 Tests pin published compact and verbose rounds for catalogues 1, 2 and 3, check scoring and persistence, and verify the asset manifest and hashes. The browser suite plays both link formats, checks repeated-answer protection and sharing, and exercises reload, collection navigation and blocked storage.
 
@@ -39,7 +45,7 @@ Tests pin published compact and verbose rounds for catalogues 1, 2 and 3, check 
 
 Retain the archived catalogue files and their images. Compact links use `#3-AbCdEfGh`; older verbose links use `#r=3.<questions>`. Decode each link against its named catalogue. Future dealing changes need a new format; future catalogue changes need a new numbered snapshot. Existing links must replay the same birds, fake names and answer positions.
 
-The repository is private. It contains no deployment configuration or automatic deployment workflow. The static game files remain ready to serve from `public/`.
+Serve only `public/` when hosting the game. The repository has no automatic deployment workflow.
 
 ## License
 

@@ -121,6 +121,27 @@ try {
   assert.match(new URL(page.url()).hash, /^#3-[A-Za-z0-9_-]{8}$/);
   results.push('Unsupported links recover to a new round; mobile layout has no horizontal overflow.');
 
+  const catalog = JSON.parse(await readFile('public/rounds/catalog-3.json', 'utf8'));
+  const publishedRound = expectedRound(fixtures.catalogs[3].rounds['3-AAAAAAAA'], catalog);
+  const scoreContext = await browser.newContext();
+  const firstTab = await scoreContext.newPage();
+  const staleTab = await scoreContext.newPage();
+  for (const tab of [firstTab, staleTab]) {
+    monitor(tab);
+    await tab.goto(`${baseURL}/#3-AAAAAAAA`);
+    await ready(tab);
+  }
+  await play(firstTab, publishedRound, 10);
+  await play(staleTab, publishedRound, 0);
+  await expect(staleTab.locator('#best')).toHaveText('10/10');
+  await staleTab.locator('#scores-button').click();
+  assert.deepEqual(await staleTab.locator('.scores strong').allTextContents(), ['10/10', '0/10']);
+  await firstTab.reload();
+  await ready(firstTab);
+  await expect(firstTab.locator('#best')).toHaveText('10/10');
+  await scoreContext.close();
+  results.push('A stale second tab preserves the first tab’s 10/10 score when it later saves 0/10.');
+
   const blockedContext = await browser.newContext();
   await blockedContext.addInitScript(() => {
     Object.defineProperty(window, 'localStorage', {get() {throw Error('Blocked');}});
@@ -129,16 +150,19 @@ try {
   monitor(blocked);
   await blocked.goto(`${baseURL}/#3-AAAAAAAA`);
   await ready(blocked);
-  const catalog = JSON.parse(await readFile('public/rounds/catalog-3.json', 'utf8'));
-  await play(blocked, expectedRound(fixtures.catalogs[3].rounds['3-AAAAAAAA'], catalog), 5);
+  await play(blocked, publishedRound, 5);
   await expect(blocked.locator('.storage-note')).toContainText('couldn’t save');
+  await blocked.locator('#again').click();
+  await ready(blocked);
+  await blocked.locator('#scores-button').click();
+  assert.deepEqual(await blocked.locator('.scores strong').allTextContents(), ['5/10']);
   await blockedContext.close();
   results.push('Blocked storage still permits a full 5/10 round and reports the failed score save.');
 
   assert.deepEqual(issues, []);
   await writeFile('qa/browser-results.json', JSON.stringify({browser: browser.version(), results, issues}, null, 2) + '\n');
   for (const result of results) console.log('PASS:', result);
-  console.log('PASS: 70 scored answers; zero unexpected browser errors or warnings.');
+  console.log('PASS: 90 scored answers; zero unexpected browser errors or warnings.');
 } finally {
   await browser?.close();
   server?.kill();

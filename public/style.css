@@ -38,3 +38,8 @@
 .close>.ui-icon{width:22px;height:22px}
 .result-strip .ui-icon{width:14px;height:14px}
 .flock-empty>span>.ui-icon{width:56px;height:56px}
+
+/* Source and code-license links sit beside the separate artwork credits. */
+.footer{flex-wrap:wrap}
+.source-links{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.source-links a{display:inline-flex;align-items:center;min-height:44px}
