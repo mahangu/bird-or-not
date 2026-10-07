@@ -1,5 +1,6 @@
+// SPDX-License-Identifier: GPL-2.0-only
 import {COLLECTION_KEY,readCollection,collectBird,saveCollection,newResetGeneration} from './collection.js';
-import {readRecords,saveRecord,rank,ROUND_SIZE,decodeRound,roundVersion,shareText,CATALOG_VERSION,newRoundCode,roundFragment} from './game.js';
+import {readRecords,saveRecord,rank,scoreAnswers,ROUND_SIZE,decodeRound,roundVersion,shareText,CATALOG_VERSION,newRoundCode,roundFragment} from './game.js';
 // Lucide SVG icons, ISC/MIT licences in assets/icons/LICENSE-lucide.txt.
 const uiIcons={'mouse-pointer-2': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z" /></svg>', 'external-link': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 3h6v6" />\n  <path d="M10 14 21 3" />\n  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></svg>', 'arrow-right': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14" />\n  <path d="m12 5 7 7-7 7" /></svg>', 'check': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5" /></svg>', 'x': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M18 6 6 18" />\n  <path d="m6 6 12 12" /></svg>', 'circle': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /></svg>', 'share-2': '<svg class="ui-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="18" cy="5" r="3" />\n  <circle cx="6" cy="12" r="3" />\n  <circle cx="18" cy="19" r="3" />\n  <line x1="8.59" x2="15.42" y1="13.51" y2="17.49" />\n  <line x1="15.41" x2="8.59" y1="6.51" y2="10.49" /></svg>'};
 const icon=name=>uiIcons[name]||'';
@@ -35,7 +36,7 @@ document.querySelector('.skip').addEventListener('click',()=>{if(!flockView.hidd
 window.addEventListener('storage',e=>{if(e.key!==COLLECTION_KEY||!flockCanSave)return;const next=readCollection(storage);flock=next.entries;flockGeneration=next.generation;resetMessage='';flockProblem=next.problem;flockCanSave=!flockProblem;updateFlockCount();if(!flockView.hidden)renderFlock();});
 const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const best=()=>records.length?Math.max(...records.map(r=>r.score)):0;
-const score=()=>answers.filter(Boolean).length;
+const score=()=>scoreAnswers(answers);
 function updateBest(){document.querySelector('#best').textContent=`${best()}/10`;}
 function art(bird,answer=false,prefix=''){
  const [x,y,w,h]=bird.crop;const W=bird.width,H=bird.height;
@@ -52,9 +53,39 @@ function renderQuestion(focus=false){
  if(focus){if(revealed)main.querySelector('#next').focus({preventScroll:true});else main.querySelector('[data-option]').focus({preventScroll:true});}
  preloadNext();
 }
-function guess(choice){if(revealed||finished||!round.length||!flockView.hidden)return;const q=round[index];q.chosen=q.options[choice];const correct=q.chosen===q.bird.name;answers.push(correct);collectionMessage='';if(correct)earnBird(q.bird);revealed=true;renderQuestion(true);}
-function next(){if(!revealed||finished)return;if(index===ROUND_SIZE-1){finish();return;}index++;revealed=false;collectionMessage='';renderQuestion(true);}
-function start(selected,token){roundToken=token||newRoundCode();round=selected||decodeRound(roundToken,birds);history.replaceState(null,'',location.pathname+location.search+roundFragment(roundToken));index=0;answers=[];collectionMessage='';revealed=false;finished=false;renderQuestion();}
+function guess(choice) {
+  if (revealed || finished || !round.length || !flockView.hidden) return;
+  const question = round[index];
+  question.chosen = question.options[choice];
+  const correct = question.chosen === question.bird.name;
+  answers.push(correct);
+  collectionMessage = '';
+  if (correct) earnBird(question.bird);
+  revealed = true;
+  renderQuestion(true);
+}
+function next() {
+  if (!revealed || finished) return;
+  if (index === ROUND_SIZE - 1) {
+    finish();
+    return;
+  }
+  index++;
+  revealed = false;
+  collectionMessage = '';
+  renderQuestion(true);
+}
+function start(selected, token) {
+  roundToken = token || newRoundCode();
+  round = selected || decodeRound(roundToken, birds);
+  history.replaceState(null, '', location.pathname + location.search + roundFragment(roundToken));
+  index = 0;
+  answers = [];
+  collectionMessage = '';
+  revealed = false;
+  finished = false;
+  renderQuestion();
+}
 function preloadNext(){if(round[index+1]){const image=new Image();image.src=round[index+1].bird.image;}}
 function finish(){
  finished=true;const total=score(),previousBest=best();const result=saveRecord(storage,records,total);records=result.records;saved=result.saved;updateBest();
@@ -63,7 +94,22 @@ function finish(){
  main.querySelector('#again').addEventListener('click',()=>{start();main.querySelector('[data-option]').focus({preventScroll:true});});
  main.querySelector('#result-flock').addEventListener('click',openFlock);main.querySelector('#share').addEventListener('click',share);main.querySelector('h1').focus({preventScroll:true});
 }
-async function share(){const text=shareText(answers);const url=location.origin+location.pathname+roundFragment(roundToken);try{if(navigator.share){await navigator.share({title:'Bird or Not?',text,url});}else{await navigator.clipboard.writeText(text+' '+url);document.querySelector('#share-status').textContent='Score and this exact flock copied. Send it to your flock.';}}catch(e){if(e.name!=='AbortError')document.querySelector('#share-status').textContent=`Copy this: ${text} ${url}`;}}
+async function share() {
+  const text = shareText(answers);
+  const url = location.origin + location.pathname + roundFragment(roundToken);
+  try {
+    if (navigator.share) {
+      await navigator.share({title: 'Bird or Not?', text, url});
+    } else {
+      await navigator.clipboard.writeText(text + ' ' + url);
+      document.querySelector('#share-status').textContent = 'Score and this exact flock copied. Send it to your flock.';
+    }
+  } catch (error) {
+    if (error.name !== 'AbortError') {
+      document.querySelector('#share-status').textContent = `Copy this: ${text} ${url}`;
+    }
+  }
+}
 function openDialog(content){document.querySelector('#dialog-content').innerHTML=content;dialog.showModal();}
 document.querySelector('#close-dialog').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close();}});
 document.querySelector('#about-button').addEventListener('click',()=>openDialog(`<h2>A bird. Two names.<br>One very real answer.</h2><div class="rules"><div class="rule"><b>1</b><div><strong>Meet a Sri Lankan bird.</strong>Some plates show more than one species. The caption tells you which bird to name.</div></div><div class="rule"><b>2</b><div><strong>Pick its actual name.</strong>Choose A or B. One is a real English bird name. The other is our invention.</div></div><div class="rule"><b>3</b><div><strong>See how you did.</strong>Ten questions, one point each. No clock. Your top five rounds stay in this browser.</div></div></div><p>This first flock has ${birds.length} species found in Sri Lanka, including ${birds.filter(b=>b.endemic).length} endemics. It’s a growing collection, not a complete field guide.</p>`));
