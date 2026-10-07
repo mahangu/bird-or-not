@@ -51,4 +51,4 @@ Serve only `public/` when hosting the game. The repository has no automatic depl
 
 Original application code, tooling, tests and documentation are licensed under **GPL-2.0-only**; see [LICENSE](LICENSE). Original game copy and invented names are included in that grant. Third-party artwork, fonts, icon SVGs, source quotations/credits and the Urban Fishing Cat logo retain their own terms.
 
-See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [the asset manifest](public/asset-licenses.json) and [the full credits](public/credits.html). The logo and social compositions containing it are authorized for this project; their inclusion does not grant a general GPL or Creative Commons license to the logo.
+See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), [the asset manifest](public/asset-licenses.json) and [the full credits](public/credits.html). The Urban Fishing Cat logo and social compositions containing it are used with permission, including distribution with this public repository. The logo is not licensed under GPL or Creative Commons.
