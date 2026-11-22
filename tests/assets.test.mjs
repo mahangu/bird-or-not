@@ -36,7 +36,7 @@ test('every shipped image and font has complete notices and a matching hash', ()
 
 test('current and archived species reference retained credited assets', () => {
   const byPath = new Map(manifest.assets.map(asset => [asset.path, asset]));
-  for (const path of ['birds.json', 'rounds/catalog-1.json', 'rounds/catalog-2.json', 'rounds/catalog-3.json']) {
+  for (const path of ['birds.json', 'rounds/catalog-1.json', 'rounds/catalog-2.json', 'rounds/catalog-3.json', 'rounds/catalog-4.json']) {
     const catalog = JSON.parse(read(path));
     assert.equal(new Set(catalog.map(bird => bird.id)).size, catalog.length);
     for (const bird of catalog) {

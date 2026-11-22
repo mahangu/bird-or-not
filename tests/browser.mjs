@@ -97,7 +97,7 @@ try {
   await page.locator('#again').click();
   await ready(page);
   const newHash = new URL(page.url()).hash;
-  assert.match(newHash, /^#3-[A-Za-z0-9_-]{8}$/);
+  assert.match(newHash, /^#4-[A-Za-z0-9_-]{8}$/);
   const names = await page.locator('.answer > span:nth-child(2)').allTextContents();
   await page.reload();
   await ready(page);
@@ -115,10 +115,10 @@ try {
   await mkdir('qa', {recursive: true});
   await page.screenshot({path: 'qa/mobile-game.png', fullPage: true});
 
-  await page.goto(`${baseURL}/#4-AAAAAAAA`);
+  await page.goto(`${baseURL}/#5-AAAAAAAA`);
   await ready(page);
   await expect(page.locator('body')).toContainText('That flock link could not be opened.');
-  assert.match(new URL(page.url()).hash, /^#3-[A-Za-z0-9_-]{8}$/);
+  assert.match(new URL(page.url()).hash, /^#4-[A-Za-z0-9_-]{8}$/);
   results.push('Unsupported links recover to a new round; mobile layout has no horizontal overflow.');
 
   const catalog = JSON.parse(await readFile('public/rounds/catalog-3.json', 'utf8'));

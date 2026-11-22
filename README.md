@@ -1,6 +1,6 @@
 # Bird or Not?
 
-An illustrated Sri Lankan bird-name quiz. Each flock has ten birds: choose the real name, collect correct guesses in My flock, and share the exact round with a friend. This edition contains 82 species. Scores and collections stay in the player's browser.
+An illustrated Sri Lankan bird-name quiz. Each flock has ten birds: choose the real name, collect correct guesses in My flock, and share the exact round with a friend. This edition contains 84 species. Scores and collections stay in the player's browser.
 
 ## Run locally
 
@@ -35,7 +35,7 @@ The browser script starts and stops its own local server. Stop an existing dev s
 
 `BIRD_BROWSER_CHANNEL` defaults to `chrome`; set it to `chromium` after `npx playwright install chromium` to use Playwright's Chromium. Screenshots and browser results go into ignored `qa/`.
 
-Tests pin published compact and verbose rounds for catalogues 1, 2 and 3, check scoring and persistence, and verify the asset manifest and hashes. The browser suite plays both link formats, checks repeated-answer protection and sharing, and exercises reload, collection navigation and blocked storage.
+Tests pin published compact and verbose rounds for catalogues 1, 2 and 3 and pin the current catalogue by SHA-256, check scoring and persistence, and verify the asset manifest and hashes. The browser suite plays both link formats, checks repeated-answer protection and sharing, and exercises reload, collection navigation and blocked storage.
 
 ## Source and compatibility
 

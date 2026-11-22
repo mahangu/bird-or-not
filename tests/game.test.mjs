@@ -101,7 +101,7 @@ test('an impossible set of fictional names fails rather than repeating a fake', 
 
 test('malformed, unsupported, repeated and out of range codes are rejected', () => {
   const bad = [
-    '', null, '0-AAAAAAAA', '4-AAAAAAAA', '3-AAAAAAA', '3-AAAAAAAAA',
+    '', null, '0-AAAAAAAA', '5-AAAAAAAA', '3-AAAAAAA', '3-AAAAAAAAA',
     '3-AAAAAAA!', '3-AAAA AAA', '9999999999999999999999999-AAAAAAAA',
     '<script>', `3.${'x'.repeat(301)}`,
     `3.${Array(10).fill('0-0-0').join('.')}`,
@@ -113,7 +113,7 @@ test('malformed, unsupported, repeated and out of range codes are rejected', () 
 });
 
 test('new codes retain the six-byte URL-safe seed format', () => {
-  for (const version of [1, 2, 3]) {
+  for (const version of [1, 2, 3, 4]) {
     const code = newRoundCode(version);
     assert.match(code, new RegExp(`^${version}-[A-Za-z0-9_-]{8}$`));
     assert.equal(atob(code.slice(2).replace(/-/g, '+').replace(/_/g, '/')).length, 6);

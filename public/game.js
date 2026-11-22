@@ -4,7 +4,7 @@ import {seededRoundV1} from './rounds/seed-v1.js';
 export const ROUND_SIZE = 10;
 export const STORAGE_KEY = 'bird-or-not:sri-lanka:v1';
 // Archive each catalogue revision before changing names, fakes or bird records.
-export const CATALOG_VERSION = 3;
+export const CATALOG_VERSION = 4;
 const compareRecords = (a, b) => b.score - a.score || b.date.localeCompare(a.date);
 const recordKey = record => `${record.score}:${record.date}`;
 

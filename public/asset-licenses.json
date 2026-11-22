@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-10-02",
+  "checkedOn": "2026-10-08",
   "assets": [
     {
       "path": "assets/plates/A monograph of the Alcedinidae (19646836819).jpg",
@@ -3545,6 +3545,60 @@
         "https://archive.org/stream/ibis43brit#page/n23/mode/2up"
       ],
       "sha256": "63794453d96b8e06af42a8c00c8b0015c59cfc78ab32e609903657676ab4dbff"
+    },
+    {
+      "path": "assets/photos/painted-francolin.jpg",
+      "creator": "Shantanu Kuveskar",
+      "source": "https://commons.wikimedia.org/wiki/File:15._Painted_francolin_or_painted_partridge_%28Francolinus_pictus%29_photograph_by_Shantanu_Kuveskar.jpg",
+      "originalFile": "https://upload.wikimedia.org/wikipedia/commons/5/56/15._Painted_francolin_or_painted_partridge_%28Francolinus_pictus%29_photograph_by_Shantanu_Kuveskar.jpg",
+      "credit": "Shantanu Kuveskar, via Wikimedia Commons",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "licenseBasis": [
+        "CC BY 4.0"
+      ],
+      "attributionRequired": true,
+      "checkedOn": "2026-10-08",
+      "copyrighted": "True",
+      "changes": "Downloaded from Wikimedia Commons; no local alteration.",
+      "sha256": "35980d875aadfbc601590d5fbcb267aac939099eaa9248db0c5c14a97a0efe08",
+      "species": [
+        "bird-83"
+      ],
+      "evidence": "https://commons.wikimedia.org/w/index.php?title=File:15._Painted_francolin_or_painted_partridge_%28Francolinus_pictus%29_photograph_by_Shantanu_Kuveskar.jpg&oldid=946850793",
+      "sourceRevision": "https://commons.wikimedia.org/w/index.php?title=File:15._Painted_francolin_or_painted_partridge_%28Francolinus_pictus%29_photograph_by_Shantanu_Kuveskar.jpg&oldid=946850793",
+      "sourceTitle": "15. Painted francolin or painted partridge (Francolinus pictus) photograph by Shantanu Kuveskar.jpg",
+      "originalArtist": "Shantanu Kuveskar",
+      "originalSourceLinks": [],
+      "usedInCurrentGame": true,
+      "adaptationLicense": "CC BY 4.0"
+    },
+    {
+      "path": "assets/photos/grey-francolin.jpg",
+      "creator": "A. J. T. Johnsingh",
+      "source": "https://commons.wikimedia.org/wiki/File:Covey_of_grey_francolin_Kutch_AJTJ_IMG_1801.JPG",
+      "originalFile": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Covey_of_grey_francolin_Kutch_AJTJ_IMG_1801.JPG",
+      "credit": "A. J. T. Johnsingh, WWF-India and NCF, via Wikimedia Commons",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "licenseBasis": [
+        "CC BY-SA 3.0"
+      ],
+      "attributionRequired": true,
+      "checkedOn": "2026-10-08",
+      "copyrighted": "True",
+      "changes": "Downloaded from Wikimedia Commons and resized for the web; no local alteration.",
+      "sha256": "3ef7e822f88413e9e9cd6182601fb86391f9abf1e5bff59cbc99f0447bb8b45e",
+      "species": [
+        "bird-84"
+      ],
+      "evidence": "https://commons.wikimedia.org/w/index.php?title=File:Covey_of_grey_francolin_Kutch_AJTJ_IMG_1801.JPG&oldid=1153664744",
+      "sourceRevision": "https://commons.wikimedia.org/w/index.php?title=File:Covey_of_grey_francolin_Kutch_AJTJ_IMG_1801.JPG&oldid=1153664744",
+      "sourceTitle": "Covey of grey francolin Kutch AJTJ IMG 1801.JPG",
+      "originalArtist": "A. J. T. Johnsingh",
+      "originalSourceLinks": [],
+      "usedInCurrentGame": true,
+      "adaptationLicense": "CC BY-SA 3.0"
     }
   ]
 }
